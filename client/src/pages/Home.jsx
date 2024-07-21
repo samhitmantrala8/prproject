@@ -40,18 +40,18 @@ export default function Home() {
             description='Explore the campus virtually.'
           />
           <Card
-            title='Canteens & Hostels'
-            link='/canteens-hostels'
-            description='Discover canteens and hostel facilities.'
+            title='General Information'
+            link='/geninfo'
+            description='Get general information about the college regarding campus life, fests, hostels, canteens.'
           />
           <Card
             title='Cultural Clubs'
-            link='/cultural-clubs'
+            link='/cultural'
             description='Learn about the cultural clubs.'
           />
           <Card
             title='Sports Clubs'
-            link='/sports-clubs'
+            link='/sports'
             description='Get to know the sports clubs.'
           />
           <Card
@@ -61,7 +61,7 @@ export default function Home() {
           />
           <Card
             title='Technical Clubs'
-            link='/technical-clubs'
+            link='/technical'
             description='Explore the technical clubs.'
           />
           <Card

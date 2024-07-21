@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function Placements() {
+export default function GenInfo() {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
 
@@ -12,7 +12,7 @@ export default function Placements() {
         setInput('');
 
         try {
-            // Send the request to fetch response from backend
+            // Send the request
             const response = await fetch('http://localhost:5000/geninfo', {
                 method: 'POST',
                 headers: {
@@ -35,8 +35,6 @@ export default function Placements() {
                 const { done, value } = await reader.read();
                 if (done) break;
                 text += decoder.decode(value, { stream: true });
-
-                // Update messages state with bot response
                 setMessages(prevMessages => {
                     const lastMessage = prevMessages[prevMessages.length - 1];
                     if (lastMessage && lastMessage.sender === 'bot') {

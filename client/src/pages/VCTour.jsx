@@ -17,11 +17,11 @@ export default function VirtualCampusTour() {
                             {/* Primary Nav */}
                             <div className='hidden md:flex items-center space-x-1'>
                                 <Link to='/vctour' className='py-5 px-3 text-gray-700 hover:text-gray-900'>Virtual Campus Tour</Link>
-                                <Link to='/canteens-hostels' className='py-5 px-3 text-gray-700 hover:text-gray-900'>Canteens & Hostels</Link>
-                                <Link to='/cultural-clubs' className='py-5 px-3 text-gray-700 hover:text-gray-900'>Cultural Clubs</Link>
-                                <Link to='/sports-clubs' className='py-5 px-3 text-gray-700 hover:text-gray-900'>Sports Clubs</Link>
+                                <Link to='/geninfo' className='py-5 px-3 text-gray-700 hover:text-gray-900'>General Information</Link>
+                                <Link to='/cultural' className='py-5 px-3 text-gray-700 hover:text-gray-900'>Cultural Clubs</Link>
+                                <Link to='/sports' className='py-5 px-3 text-gray-700 hover:text-gray-900'>Sports Clubs</Link>
                                 <Link to='/placements' className='py-5 px-3 text-gray-700 hover:text-gray-900'>Placements</Link>
-                                <Link to='/technical-clubs' className='py-5 px-3 text-gray-700 hover:text-gray-900'>Technical Clubs</Link>
+                                <Link to='/technical' className='py-5 px-3 text-gray-700 hover:text-gray-900'>Technical Clubs</Link>
                                 <Link to='/academics' className='py-5 px-3 text-gray-700 hover:text-gray-900'>Academics</Link>
                             </div>
                         </div>
