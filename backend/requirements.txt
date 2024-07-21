@@ -5,7 +5,7 @@ pymongo
 transformers
 torch
 PyMuPDF
-dns-python
+dnspython
 Flask-session
 sentence-transformers
 openai
