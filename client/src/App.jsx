@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -14,29 +15,97 @@ import Sports from './pages/Sports';
 import Cultural from './pages/Cultural';
 import Technical from './pages/Technical';
 import GenInfo from './pages/GenInfo';
-export default function App() {
-  return (
-    <UserProvider>
-      <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/sign-in' element={<SignIn />} />
-          <Route path='/sign-up' element={<SignUp />} />
-          <Route path='/about' element={<About />} />
-          <Route path='/vctour' element={<VCTour />} />
-          <Route path='/sports' element={<Sports />} />
-          <Route path='/cultural' element={<Cultural />} />
-          <Route path='/technical' element={<Technical />} />
-          <Route path='/placements' element={<Placements />} />
-          <Route path='/academics' element={<Academics />} />
-          <Route path='/geninfo' element={<GenInfo />} />
+import { Footer } from './components/Footer';
+import bgImg from './assets/bg-4.jpg';
 
-          <Route element={<PrivateRoute />}>
-            <Route path='/profile' element={<Profile />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </UserProvider>
+export default function App() {
+  const [showHeader, setShowHeader] = useState(true);
+  const [showFooter, setShowFooter] = useState(false);
+
+  const handlePathChange = (path) => {
+    const headerRoutes = ['/', '/about', '/profile'];
+    const footerRoutes = ['/', '/about', '/profile'];
+
+    setShowHeader(headerRoutes.includes(path));
+    setShowFooter(footerRoutes.includes(path));
+  };
+
+  return (
+    <div
+      className="bg-cover bg-center min-h-screen"
+      style={{
+        backgroundImage: `url(${bgImg})`,
+      }}
+    >
+      <UserProvider>
+        <BrowserRouter>
+          {showHeader && <Header />}
+          <Routes>
+            <Route
+              path='/'
+              element={<PageWrapper handlePathChange={handlePathChange}><Home /></PageWrapper>}
+            />
+            <Route
+              path='/sign-in'
+              element={<PageWrapper handlePathChange={handlePathChange}><SignIn /></PageWrapper>}
+            />
+            <Route
+              path='/sign-up'
+              element={<PageWrapper handlePathChange={handlePathChange}><SignUp /></PageWrapper>}
+            />
+            <Route
+              path='/about'
+              element={<PageWrapper handlePathChange={handlePathChange}><About /></PageWrapper>}
+            />
+            <Route
+              path='/vctour'
+              element={<PageWrapper handlePathChange={handlePathChange}><VCTour /></PageWrapper>}
+            />
+            <Route
+              path='/sports'
+              element={<PageWrapper handlePathChange={handlePathChange}><Sports /></PageWrapper>}
+            />
+            <Route
+              path='/cultural'
+              element={<PageWrapper handlePathChange={handlePathChange}><Cultural /></PageWrapper>}
+            />
+            <Route
+              path='/technical'
+              element={<PageWrapper handlePathChange={handlePathChange}><Technical /></PageWrapper>}
+            />
+            <Route
+              path='/placements'
+              element={<PageWrapper handlePathChange={handlePathChange}><Placements /></PageWrapper>}
+            />
+            <Route
+              path='/academics'
+              element={<PageWrapper handlePathChange={handlePathChange}><Academics /></PageWrapper>}
+            />
+            <Route
+              path='/geninfo'
+              element={<PageWrapper handlePathChange={handlePathChange}><GenInfo /></PageWrapper>}
+            />
+
+            <Route element={<PrivateRoute />}>
+              <Route
+                path='/profile'
+                element={<PageWrapper handlePathChange={handlePathChange}><Profile /></PageWrapper>}
+              />
+            </Route>
+          </Routes>
+          {showFooter && <Footer />}
+        </BrowserRouter>
+      </UserProvider>
+    </div>
   );
 }
+
+const PageWrapper = ({ children, handlePathChange }) => {
+  const location = useLocation();
+
+  useEffect(() => {
+    handlePathChange(location.pathname);
+  }, [location, handlePathChange]);
+
+  return children;
+};

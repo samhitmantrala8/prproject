@@ -55,14 +55,36 @@ export default function Header() {
     }, [location.search]);
 
     return (
-        <header className='bg-slate-200 shadow-md'>
+        <header className='sticky top-0 z-50 bg-gradient-to-r from-white via-pink-200 to-blue-300 shadow-md'>
             <div className='flex justify-between items-center max-w-6xl mx-auto p-3 relative'>
-                <Link to='/'>
-                    <h1 className='font-bold text-sm sm:text-xl flex flex-wrap'>
-                        <span className='text-slate-500'>iiitdm</span>
-                        <span className='text-slate-700'>Chat</span>
+                <Link to='/' className="flex items-center space-x-2">
+                    <svg
+                        className="w-8 h-8"
+                        viewBox="0 0 24 24"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeMiterlimit="10"
+                        fill="none"
+                    >
+                        <defs>
+                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style={{ stopColor: '#6ee7b7', stopOpacity: 1 }} />
+                                <stop offset="100%" style={{ stopColor: '#a4c9f4', stopOpacity: 1 }} />
+                            </linearGradient>
+                        </defs>
+                        <rect x="3" y="1" width="7" height="12" fill="url(#grad1)" />
+                        <rect x="3" y="17" width="7" height="6" fill="url(#grad1)" />
+                        <rect x="14" y="1" width="7" height="6" fill="url(#grad1)" />
+                        <rect x="14" y="11" width="7" height="12" fill="url(#grad1)" />
+                    </svg>
+                    <h1 className='font-bold text-sm sm:text-xl lg:text-2xl flex items-center'>
+                        <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+                            iiitdmChat
+                        </span>
                     </h1>
                 </Link>
+
                 <form
                     onSubmit={handleSubmit}
                     className='relative bg-slate-100 p-3 rounded-lg flex items-center'
@@ -95,12 +117,13 @@ export default function Header() {
                 </form>
                 <ul className='flex gap-4'>
                     <Link to='/'>
-                        <li className='hidden sm:inline text-slate-700 hover:underline'>
+                        <li className='hidden sm:inline font-bold text-xl text-slate-700 hover:underline'>
                             Home
                         </li>
                     </Link>
+                    <span className='text-slate-700 font-bold text-xl cursor-default'>|</span>
                     <Link to='/about'>
-                        <li className='hidden sm:inline text-slate-700 hover:underline'>
+                        <li className='hidden sm:inline font-bold text-xl text-slate-700 hover:underline'>
                             About
                         </li>
                     </Link>
