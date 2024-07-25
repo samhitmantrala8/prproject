@@ -4,6 +4,7 @@ from flask_cors import CORS
 from pymongo import MongoClient
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import time
+import json
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -22,7 +23,6 @@ app.secret_key = '1a2b3c4d5e6f'  # Change this to a secure secret key
 model_name = "samhitmantrala/che2"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name)
-
 @app.route('/api/auth/signup', methods=['POST'])
 def signup():
     data = request.json
@@ -31,17 +31,17 @@ def signup():
     password = data.get('password')
     
     if not username or not email or not password:
-        return Response("All fields are required", status=400)
+        return Response(json.dumps({"error": "All fields are required"}), status=400, mimetype='application/json')
 
     existing_user = users_collection.find_one({"email": email})
     if existing_user:
-        return Response("User already exists", status=400)
+        return Response(json.dumps({"error": "User already exists"}), status=400, mimetype='application/json')
 
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     user_data = {"username": username, "email": email, "password": hashed_password}
     users_collection.insert_one(user_data)
     
-    return Response("User registered successfully", status=201)
+    return Response(json.dumps({"message": "User registered successfully"}), status=201, mimetype='application/json')
 
 @app.route('/api/auth/signin', methods=['POST'])
 def signin():
@@ -50,14 +50,21 @@ def signin():
     password = data.get('password')
     
     if not email or not password:
-        return Response("Email and password are required", status=400)
+        return Response({"error": "Email and password are required"}, status=400, mimetype='application/json')
 
     user = users_collection.find_one({"email": email})
     if not user or not bcrypt.check_password_hash(user['password'], password):
-        return Response("Invalid email or password", status=401)
+        return Response({"error": "Invalid email or password"}, status=401, mimetype='application/json')
 
     session['email'] = email  # Store user's email in session for sign-in
-    return Response(f"Signed in successfully, user: {user['username']}", status=200)
+    response_data = {
+        "message": "Signed in successfully",
+        "user": {
+            "username": user['username'],
+            "email": user['email']
+        }
+    }
+    return Response(json.dumps(response_data), status=200, mimetype='application/json')
 
 @app.route('/api/auth/signout', methods=['POST'])
 def sign_out():
