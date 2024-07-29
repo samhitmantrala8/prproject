@@ -7,13 +7,13 @@ export default function Cultural() {
 
     const sendMessage = async () => {
         if (!input) return;
-        const userMessage = { message: input, category: 'che2' };
+        const userMessage = { message: input };
         setMessages([...messages, { text: input, sender: 'user' }]);
         setInput('');
 
         try {
             // Send the request
-            const response = await fetch('http://localhost:5000/generate_response', {
+            const response = await fetch('http://localhost:5000/cul_resp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
