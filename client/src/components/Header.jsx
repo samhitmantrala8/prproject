@@ -135,7 +135,9 @@ export default function Header() {
                                 alt='profile'
                             />
                         ) : (
-                            <li className=' text-slate-700 hover:underline'> Sign in</li>
+                            <button className="text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 px-4 py-1 rounded-lg transition duration-300">
+                                Sign in
+                            </button>
                         )}
                     </Link>
                 </ul>
