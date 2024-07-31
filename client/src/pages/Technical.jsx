@@ -13,7 +13,7 @@ export default function Technical() {
 
         try {
             // Send the request
-            const response = await fetch('http://localhost:5000/technical', {
+            const response = await fetch('http://localhost:5000/tech_resp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
