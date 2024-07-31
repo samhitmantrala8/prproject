@@ -14,10 +14,9 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
 from dotenv import load_dotenv
 import google.generativeai as genai  # Ensure this import is present
-
 import os
-os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -30,7 +29,7 @@ db = client['mydatabase']
 users_collection = db['users']
 
 # Ensure app.secret_key is set for session management
-app.secret_key = '1a2b3c4d5e6f'  # Change this to a secure secret key
+app.secret_key = '1a2b3c4d5e6f'  
 
 # Load the Hugging Face model and tokenizer
 model_name = "HuggingFaceTB/SmolLM-360M"
@@ -41,6 +40,14 @@ model = AutoModelForCausalLM.from_pretrained(model_name)
 load_dotenv()
 api_key = os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=api_key)
+
+# Predefined list of words to check in the response
+predefined_words = [
+    "sorry", "don't", "have", "information", "related", "query",
+    "context", "does", "not", "mention", "anything",
+    "I", "cannot", "answer", "question",
+    "provided"
+]
 
 def get_pdf_text(pdf_docs):
     text = ""
@@ -89,6 +96,21 @@ def user_input(user_question):
 
     return response["output_text"]
 
+def process_user_question(user_question, pdf_filename):
+    # Extract text from the specified PDF file
+    pdf_text = get_pdf_text([pdf_filename])
+    text_chunks = get_text_chunks(pdf_text)
+    get_vector_store(text_chunks)
+    
+    response_text = user_input(user_question)
+    return response_text
+
+def needs_fallback(response_text):
+    response_words = response_text.lower().split()
+    if len(response_words) > 30:
+        return False
+    match_count = sum(1 for word in predefined_words if word in response_words)
+    return match_count >= 3
 
 @app.route('/api/auth/signup', methods=['POST'])
 def signup():
@@ -143,39 +165,115 @@ def sign_out():
 
 @app.route('/geninfo', methods=['POST'])
 def geninfo():
-    user_message = request.json['message']
+    user_question = request.json.get('message')
     
-    def generate_text_stream(user_message):
-        input_ids = tokenizer.encode(user_message + tokenizer.eos_token, return_tensors='pt')
-        
-        response_ids = model.generate(
-            input_ids,
-            max_length=150,
-            num_return_sequences=1,
-            pad_token_id=tokenizer.eos_token_id
-        )
-        
-        response_text = tokenizer.decode(response_ids[0], skip_special_tokens=True)
+    if not user_question:
+        return Response("Question is required", status=400, mimetype='text/plain')
 
-        # Streaming each character with a delay
-        for char in response_text:
-            yield char
-            time.sleep(0.05)  # 0.05 seconds delay
+    try:
+        response_text = process_user_question(user_question, "geninfo.pdf")
+        if needs_fallback(response_text):
+            model = genai.GenerativeModel('gemini-pro')
+            response = model.generate_content(user_question)
+            response_text = response.text
+        
+        def stream(response_text):
+            for char in response_text:
+                yield char
+                time.sleep(0.03)
+        return Response(stream(response_text), status=200, mimetype='text/plain')
+    except Exception as e:
+        return Response(str(e), status=500, mimetype='text/plain')
 
-    return Response(generate_text_stream(user_message), content_type='text/plain;charset=utf-8')
 @app.route('/cul_resp', methods=['POST'])
 def cul_resp():
-    user_question = request.json.get('message')
+    user_question = request.json['message']
 
     if not user_question:
         return Response("Question is required", status=400, mimetype='text/plain')
 
     try:
-        response_text = user_input(user_question)
-        return Response(response_text, status=200, mimetype='text/plain')
+        response_text = process_user_question(user_question, "culturalPR.pdf")
+        if needs_fallback(response_text):
+            model = genai.GenerativeModel('gemini-1.5-flash')
+            response = model.generate_content(user_question)
+            response_text = response.text
+        
+        def stream(response_text):
+            for char in response_text:
+                yield char
+                time.sleep(0.03)
+        return Response(stream(response_text), status=200, mimetype='text/plain')
     except Exception as e:
         return Response(str(e), status=500, mimetype='text/plain')
 
+@app.route('/placement', methods=['POST'])
+def placement():
+    user_question = request.json['message']
+
+    if not user_question:
+        return Response("Question is required", status=400, mimetype='text/plain')
+
+    try:
+        response_text = process_user_question(user_question, "placementsPR.pdf")
+        if needs_fallback(response_text):
+            model = genai.GenerativeModel('gemini-1.5-flash')
+            response = model.generate_content(user_question)
+            response_text = response.text
+
+        def stream(response_text):
+            for char in response_text:
+                yield char
+                time.sleep(0.03)
+        return Response(stream(response_text), status=200, mimetype='text/plain')
+    except Exception as e:
+        return Response(str(e), status=500, mimetype='text/plain')
+
+
+@app.route('/tech_resp', methods=['POST'])
+def tech_resp():
+    user_question = request.json['message']
+
+    if not user_question:
+        return Response("Question is required", status=400, mimetype='text/plain')
+
+    try:
+        response_text = process_user_question(user_question, "technicalclubs.pdf")
+        if needs_fallback(response_text):
+            model = genai.GenerativeModel('gemini-1.5-flash')
+            response = model.generate_content(user_question)
+            response_text = response.text
+
+        def stream(response_text):
+            for char in response_text:
+                yield char
+                time.sleep(0.03)
+        return Response(stream(response_text), status=200, mimetype='text/plain')
+    except Exception as e:
+        return Response(str(e), status=500, mimetype='text/plain')
+    
+
+@app.route('/sports_resp', methods=['POST'])
+def sports_resp():
+    user_question = request.json['message']
+
+    if not user_question:
+        return Response("Question is required", status=400, mimetype='text/plain')
+
+    try:
+        response_text = process_user_question(user_question, "sportsclubs.pdf")
+        if needs_fallback(response_text):
+            model = genai.GenerativeModel('gemini-1.5-flash')
+            response = model.generate_content(user_question)
+            response_text = response.text
+
+        def stream(response_text):
+            for char in response_text:
+                yield char
+                time.sleep(0.03)
+        return Response(stream(response_text), status=200, mimetype='text/plain')
+    except Exception as e:
+        return Response(str(e), status=500, mimetype='text/plain')
 
 if __name__ == '__main__':
     app.run(debug=True)

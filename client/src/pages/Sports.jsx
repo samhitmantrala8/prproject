@@ -13,7 +13,7 @@ export default function Sports() {
 
         try {
             // Send the request
-            const response = await fetch('http://localhost:5000/sports', {
+            const response = await fetch('http://localhost:5000/sports_resp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

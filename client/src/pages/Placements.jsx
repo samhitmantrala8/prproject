@@ -12,8 +12,8 @@ export default function Placements() {
         setInput('');
 
         try {
-            // Send the request to fetch response from backend
-            const response = await fetch('http://localhost:5000/geninfo', {
+            // Send the request
+            const response = await fetch('http://localhost:5000/placement', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -35,8 +35,6 @@ export default function Placements() {
                 const { done, value } = await reader.read();
                 if (done) break;
                 text += decoder.decode(value, { stream: true });
-
-                // Update messages state with bot response
                 setMessages(prevMessages => {
                     const lastMessage = prevMessages[prevMessages.length - 1];
                     if (lastMessage && lastMessage.sender === 'bot') {
