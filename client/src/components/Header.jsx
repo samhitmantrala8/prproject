@@ -31,6 +31,11 @@ export default function Header() {
         setFilteredItems(filtered);
     };
 
+    const getInitials = (username) => {
+        const names = username.split(' ');
+        return names.map(name => name[0]).join('').toUpperCase();
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const urlParams = new URLSearchParams(window.location.search);
@@ -102,7 +107,7 @@ export default function Header() {
                         <FaSearch className='text-slate-600' />
                     </button>
                     {showDropdown && filteredItems.length > 0 && (
-                        <ul className='absolute bg-white border mt-64 w-full rounded-lg shadow-lg max-h-60 overflow-auto z-10'>
+                        <ul className='absolute bg-white border mt-72 w-full rounded-lg shadow-lg max-h-60 overflow-auto z-10'>
                             {filteredItems.map((item) => (
                                 <li
                                     key={item.path}
@@ -129,11 +134,9 @@ export default function Header() {
                     </Link>
                     <Link to='/profile'>
                         {currentUser ? (
-                            <img
-                                className='rounded-full h-7 w-7 object-cover'
-                                src={currentUser.avatar}
-                                alt='profile'
-                            />
+                            <div className='flex items-center justify-center rounded-full h-7 w-7 bg-blue-500 text-white font-bold'>
+                                {getInitials(currentUser.user.username)}
+                            </div>
                         ) : (
                             <button className="text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 px-4 py-1 rounded-lg transition duration-300">
                                 Sign in

@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+
 
 export default function Technical() {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-
+    const { currentUser, loading, error } = useSelector((state) => state.user);
     const sendMessage = async () => {
         if (!input) return;
-        const userMessage = { message: input };
+
+        // Parse the JSON string to an object
+        const email = currentUser?.user?.email || '';
+       
+        const userMessage = { message: input, email: email };
         setMessages([...messages, { text: input, sender: 'user' }]);
         setInput('');
 
         try {
-            // Send the request
             const response = await fetch('http://localhost:5000/tech_resp', {
                 method: 'POST',
                 headers: {
