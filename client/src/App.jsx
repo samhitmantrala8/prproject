@@ -42,53 +42,53 @@ export default function App() {
           {showHeader && <Header />}
           <Routes>
             <Route
-              path='/'
+              path="/"
               element={<PageWrapper handlePathChange={handlePathChange}><Home /></PageWrapper>}
             />
             <Route
-              path='/sign-in'
+              path="/sign-in"
               element={<PageWrapper handlePathChange={handlePathChange}><SignIn /></PageWrapper>}
             />
             <Route
-              path='/sign-up'
+              path="/sign-up"
               element={<PageWrapper handlePathChange={handlePathChange}><SignUp /></PageWrapper>}
             />
             <Route
-              path='/about'
+              path="/about"
               element={<PageWrapper handlePathChange={handlePathChange}><About /></PageWrapper>}
             />
             <Route
-              path='/vctour'
+              path="/vctour"
               element={<PageWrapper handlePathChange={handlePathChange}><VCTour /></PageWrapper>}
             />
             <Route
-              path='/sports'
+              path="/sports"
               element={<PageWrapper handlePathChange={handlePathChange}><Sports /></PageWrapper>}
             />
             <Route
-              path='/cultural'
+              path="/cultural"
               element={<PageWrapper handlePathChange={handlePathChange}><Cultural /></PageWrapper>}
             />
             <Route
-              path='/technical'
+              path="/technical"
               element={<PageWrapper handlePathChange={handlePathChange}><Technical /></PageWrapper>}
             />
             <Route
-              path='/placements'
+              path="/placements"
               element={<PageWrapper handlePathChange={handlePathChange}><Placements /></PageWrapper>}
             />
             <Route
-              path='/academics'
-              element={<PageWrapper handlePathChange={handlePathChange}><Academics /></PageWrapper>}
-            />
-            <Route
-              path='/geninfo'
+              path="/geninfo"
               element={<PageWrapper handlePathChange={handlePathChange}><GenInfo /></PageWrapper>}
             />
 
             <Route element={<PrivateRoute />}>
               <Route
-                path='/profile'
+                path="/academics"
+                element={<PageWrapper handlePathChange={handlePathChange}><Academics /></PageWrapper>}
+              />
+              <Route
+                path="/profile"
                 element={<PageWrapper handlePathChange={handlePathChange}><Profile /></PageWrapper>}
               />
             </Route>
