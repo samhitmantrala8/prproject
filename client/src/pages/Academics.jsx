@@ -29,6 +29,13 @@ export default function Academics() {
                 </div>
             </nav>
 
+            {/* Welcome Message */}
+            <div className="p-4 bg-white text-center rounded-lg mb-4">
+                <p className="font-bold text-lg">
+                    Welcome to iiitdmChat! Chatbot for Academics Details/Info
+                </p>
+            </div>
+
             
         </div>
     );

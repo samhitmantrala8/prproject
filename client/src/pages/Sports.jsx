@@ -82,11 +82,18 @@ export default function Sports() {
                 </div>
             </nav>
 
+            {/* Welcome Message */}
+            <div className="p-4 bg-white text-center rounded-lg mb-4">
+                <p className="font-bold text-lg">
+                    Welcome to iiitdmChat! Chatbot for Sports Clubs Information
+                </p>
+            </div>
+
             {/* Chat Window */}
             <div className="flex-grow p-4 overflow-auto bg-gray-100">
                 <div className="chat-window max-w-6xl mx-auto border rounded-lg p-4 bg-white">
                     {messages.map((msg, index) => (
-                        <div key={index} className={`message ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
+                        <div key={index} className={`message mt-4 ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
                             <p className={`p-2 rounded-lg inline-block ${msg.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>
                                 {msg.text}
                             </p>
