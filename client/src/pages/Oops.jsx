@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-export default function Sports() {
+export default function Oops() {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const { currentUser } = useSelector((state) => state.user);
@@ -16,7 +16,7 @@ export default function Sports() {
         setInput('');
 
         try {
-            const response = await fetch('http://localhost:5000/sports_resp', {
+            const response = await fetch('http://localhost:5000/oops_acad', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ export default function Sports() {
                     {messages.length === 0 ? (
                         <div className="mt-4 text-center">
                             <p className="p-2 bg-blue-100 text-black rounded-lg inline-block">
-                                Ask anything about the Sports clubs!
+                                Ask anything about Object oriented programming!
                             </p>
                         </div>
                     ) : (

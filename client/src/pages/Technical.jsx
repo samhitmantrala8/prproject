@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-
+import { useSelector } from 'react-redux';
 
 export default function Technical() {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-    const { currentUser, loading, error } = useSelector((state) => state.user);
+    const { currentUser } = useSelector((state) => state.user);
+
     const sendMessage = async () => {
         if (!input) return;
 
-        // Parse the JSON string to an object
         const email = currentUser?.user?.email || '';
-
         const userMessage = { message: input, email: email };
         setMessages([...messages, { text: input, sender: 'user' }]);
         setInput('');
@@ -30,12 +28,10 @@ export default function Technical() {
                 throw new Error('Network response was not ok');
             }
 
-            // Read the response stream
             const reader = response.body.getReader();
             const decoder = new TextDecoder('utf-8');
             let text = '';
 
-            // Process the stream
             while (true) {
                 const { done, value } = await reader.read();
                 if (done) break;
@@ -82,23 +78,24 @@ export default function Technical() {
                 </div>
             </nav>
 
-            {/* Welcome Message */}
-            <div className="p-4 bg-white text-center rounded-lg mb-4">
-                <p className="font-bold text-lg">
-                    Welcome to iiitdmChat! Chatbot for Technical Clubs Information
-                </p>
-            </div>
-
             {/* Chat Window */}
             <div className="flex-grow p-4 overflow-auto bg-gray-100">
-                <div className="chat-window max-w-6xl mx-auto border rounded-lg p-4 bg-white">
-                    {messages.map((msg, index) => (
-                        <div key={index} className={`message mt-4 ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
-                            <p className={`p-2 rounded-lg inline-block ${msg.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>
-                                {msg.text}
+                <div className="chat-window max-w-6xl mx-auto border bg-slate-100 rounded-lg p-4 bg-white">
+                    {messages.length === 0 ? (
+                        <div className="mt-4 text-center">
+                            <p className="p-2 bg-blue-100 text-black rounded-lg inline-block">
+                                Ask anything about the technical clubs!
                             </p>
                         </div>
-                    ))}
+                    ) : (
+                        messages.map((msg, index) => (
+                            <div key={index} className={`mt-4 message ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
+                                <p className={`p-2 rounded-lg inline-block ${msg.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>
+                                    {msg.text}
+                                </p>
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
 
