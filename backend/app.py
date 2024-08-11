@@ -32,11 +32,6 @@ messages_collection = db['messages']  # Ensure this is defined
 # Ensure app.secret_key is set for session management
 app.secret_key = '1a2b3c4d5e6f'  
 
-# Load the Hugging Face model and tokenizer
-model_name = "HuggingFaceTB/SmolLM-360M"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(model_name)
-
 # Load the Google API key
 load_dotenv()
 api_key = os.getenv("GOOGLE_API_KEY")
@@ -133,6 +128,215 @@ def signup():
     
     return Response(json.dumps({"message": "User registered successfully"}), status=201, mimetype='application/json')
 
+
+@app.route('/cul_resp', methods=['POST'])
+def cul_resp():
+    user_question = request.json.get('message')
+    email = request.json.get('email')  # Ensure email is fetched from session
+
+    if not user_question:
+        return Response("Question is required", status=400, mimetype='text/plain')
+
+    try:
+        response_text = process_user_question(user_question, "culturalclubs.pdf")
+        if needs_fallback(response_text):
+            model = genai.GenerativeModel('gemini-pro')
+            response = model.generate_content(user_question)
+            response_text = response.text
+        
+        # Save both user question and bot response to MongoDB
+        messages_collection.insert_one({
+            "user_message": user_question,
+            "bot_response": response_text,
+            "user_email": email,
+            "timestamp": time.time()
+        })
+
+        def stream(response_text):
+            for char in response_text:
+                yield char
+                time.sleep(0.03)
+        return Response(stream(response_text), status=200, mimetype='text/plain')
+    except Exception as e:
+        return Response(f"Error: {str(e)}", status=500, mimetype='text/plain')
+
+@app.route('/tech_resp', methods=['POST'])
+def tech_resp():
+    user_question = request.json.get('message')
+    email = request.json.get('email')  # Ensure email is fetched from session
+
+    if not user_question:
+        return Response("Question is required", status=400, mimetype='text/plain')
+
+    try:
+        response_text = process_user_question(user_question, "technicalclubs.pdf")
+        if needs_fallback(response_text):
+            model = genai.GenerativeModel('gemini-pro')
+            response = model.generate_content(user_question)
+            response_text = response.text
+        
+        # Save both user question and bot response to MongoDB
+        messages_collection.insert_one({
+            "user_message": user_question,
+            "bot_response": response_text,
+            "user_email": email,
+            "timestamp": time.time()
+        })
+
+        def stream(response_text):
+            for char in response_text:
+                yield char
+                time.sleep(0.03)
+        return Response(stream(response_text), status=200, mimetype='text/plain')
+    except Exception as e:
+        return Response(f"Error: {str(e)}", status=500, mimetype='text/plain')
+@app.route('/cn_acad', methods=['POST'])
+def cn_resp():
+    user_question = request.json.get('message')
+    email = request.json.get('email')  # Ensure email is fetched from session
+
+    if not user_question:
+        return Response("Question is required", status=400, mimetype='text/plain')
+
+    try:
+        response_text = process_user_question(user_question, "cnPR.pdf")
+        if needs_fallback(response_text):
+            model = genai.GenerativeModel('gemini-pro')
+            response = model.generate_content(user_question)
+            response_text = response.text
+        
+        # Save both user question and bot response to MongoDB
+        messages_collection.insert_one({
+            "user_message": user_question,
+            "bot_response": response_text,
+            "user_email": email,
+            "timestamp": time.time()
+        })
+
+        def stream(response_text):
+            for char in response_text:
+                yield char
+                time.sleep(0.03)
+        return Response(stream(response_text), status=200, mimetype='text/plain')
+    except Exception as e:
+        return Response(f"Error: {str(e)}", status=500, mimetype='text/plain')
+
+
+@app.route('/dbms_acad', methods=['POST'])
+def dbms_resp():
+    user_question = request.json.get('message')
+    email = request.json.get('email')  # Ensure email is fetched from session
+
+    if not user_question:
+        return Response("Question is required", status=400, mimetype='text/plain')
+
+    try:
+        response_text = process_user_question(user_question, "dbmsPR.pdf")
+        if needs_fallback(response_text):
+            model = genai.GenerativeModel('gemini-pro')
+            response = model.generate_content(user_question)
+            response_text = response.text
+        
+        # Save both user question and bot response to MongoDB
+        messages_collection.insert_one({
+            "user_message": user_question,
+            "bot_response": response_text,
+            "user_email": email,
+            "timestamp": time.time()
+        })
+
+        def stream(response_text):
+            for char in response_text:
+                yield char
+                time.sleep(0.03)
+        return Response(stream(response_text), status=200, mimetype='text/plain')
+    except Exception as e:
+        return Response(f"Error: {str(e)}", status=500, mimetype='text/plain')
+
+
+@app.route('/oops_acad', methods=['POST'])
+def oops_resp():
+    user_question = request.json.get('message')
+    email = request.json.get('email')  # Ensure email is fetched from session
+
+    if not user_question:
+        return Response("Question is required", status=400, mimetype='text/plain')
+
+    try:
+        response_text = process_user_question(user_question, "oopsPR.pdf")
+        if needs_fallback(response_text):
+            model = genai.GenerativeModel('gemini-pro')
+            response = model.generate_content(user_question)
+            response_text = response.text
+        
+        # Save both user question and bot response to MongoDB
+        messages_collection.insert_one({
+            "user_message": user_question,
+            "bot_response": response_text,
+            "user_email": email,
+            "timestamp": time.time()
+        })
+
+        def stream(response_text):
+            for char in response_text:
+                yield char
+                time.sleep(0.03)
+        return Response(stream(response_text), status=200, mimetype='text/plain')
+    except Exception as e:
+        return Response(f"Error: {str(e)}", status=500, mimetype='text/plain')
+
+
+@app.route('/os_acad', methods=['POST'])
+def os_resp():
+    user_question = request.json.get('message')
+    email = request.json.get('email')  # Ensure email is fetched from session
+
+    if not user_question:
+        return Response("Question is required", status=400, mimetype='text/plain')
+
+    try:
+        response_text = process_user_question(user_question, "osPR.pdf")
+        if needs_fallback(response_text):
+            model = genai.GenerativeModel('gemini-pro')
+            response = model.generate_content(user_question)
+            response_text = response.text
+        
+        # Save both user question and bot response to MongoDB
+        messages_collection.insert_one({
+            "user_message": user_question,
+            "bot_response": response_text,
+            "user_email": email,
+            "timestamp": time.time()
+        })
+
+        def stream(response_text):
+            for char in response_text:
+                yield char
+                time.sleep(0.03)
+        return Response(stream(response_text), status=200, mimetype='text/plain')
+    except Exception as e:
+        return Response(f"Error: {str(e)}", status=500, mimetype='text/plain')
+
+      
+@app.route('/api/user/chat-history', methods=['GET'])
+def get_chat_history():
+    email = session.get('email')
+    if not email:
+        print("No email found in session")  # Debugging
+        return Response("User not logged in", status=401, mimetype='text/plain')
+    
+    try:
+        chat_history = messages_collection.find({"user_email": email})
+        chat_history_list = list(chat_history)
+        
+        for message in chat_history_list:
+            message['_id'] = str(message['_id'])
+        
+        return Response(json.dumps(chat_history_list), status=200, mimetype='application/json')
+    except Exception as e:
+        print(f"Error in get_chat_history: {str(e)}")  # Log error for debugging
+        return Response(f"Error: {str(e)}", status=500, mimetype='text/plain')
+
 @app.route('/api/auth/signin', methods=['POST'])
 def signin():
     data = request.json
@@ -146,7 +350,7 @@ def signin():
     if not user or not bcrypt.check_password_hash(user['password'], password):
         return Response(json.dumps({"error": "Invalid email or password"}), status=401, mimetype='application/json')
 
-    session['email'] = email  # Store user's email in session for sign-in
+    session['email'] = email 
     response_data = {
         "message": "Signed in successfully",
         "user": {
@@ -226,6 +430,55 @@ def placement():
     except Exception as e:
         return Response(f"Error: {str(e)}", status=500, mimetype='text/plain')
 
+@app.route('/placementG', methods=['POST'])
+def placementG():
+    user_question = request.json.get('message')
+    email = request.json.get('email')  # Ensure email is fetched from session
+
+    if not user_question:
+        return Response("Question is required", status=400, mimetype='text/plain')
+
+    try:
+        # Tokenize the user question
+        inputs = tokenizer(user_question, return_tensors="pt")
+
+        with torch.no_grad():  # Disable gradient calculation for inference
+            outputs = model.generate(
+                **inputs,
+                max_length=100,  # Adjust the maximum length as needed
+                num_beams=5,     # Use beam search for better quality
+                no_repeat_ngram_size=2,  # Avoid repeating n-grams
+                early_stopping=True  # Stop when all beams reach the end token
+            )
+
+        # Decode the response
+        response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+        
+        # Clean the response text
+        response_text = response_text.replace('<Human>', '').replace('<AI>', '').strip()
+
+        if needs_fallback(response_text):
+            # Fallback to Google Generative AI if needed
+            google_model = get_google_model()  # Replace with the appropriate function
+            response_text = google_model(user_question)  # Update this to use the right method
+
+        # Save both user question and bot response to MongoDB
+        messages_collection.insert_one({
+            "user_message": user_question,
+            "bot_response": response_text,
+            "user_email": email,
+            "timestamp": time.time()
+        })
+
+        def stream(response_text):
+            for char in response_text:
+                yield char
+                time.sleep(0.03)
+
+        return Response(stream(response_text), status=200, mimetype='text/plain')
+    except Exception as e:
+        return Response(f"Error: {str(e)}", status=500, mimetype='text/plain')
+
 @app.route('/sports_resp', methods=['POST'])
 def sports_resp():
     user_question = request.json.get('message')
@@ -257,87 +510,6 @@ def sports_resp():
     except Exception as e:
         return Response(f"Error: {str(e)}", status=500, mimetype='text/plain')
 
-@app.route('/cul_resp', methods=['POST'])
-def cul_resp():
-    user_question = request.json.get('message')
-    email = request.json.get('email')  # Ensure email is fetched from session
-
-    if not user_question:
-        return Response("Question is required", status=400, mimetype='text/plain')
-
-    try:
-        response_text = process_user_question(user_question, "culturalclubs.pdf")
-        if needs_fallback(response_text):
-            model = genai.GenerativeModel('gemini-pro')
-            response = model.generate_content(user_question)
-            response_text = response.text
-        
-        # Save both user question and bot response to MongoDB
-        messages_collection.insert_one({
-            "user_message": user_question,
-            "bot_response": response_text,
-            "user_email": email,
-            "timestamp": time.time()
-        })
-
-        def stream(response_text):
-            for char in response_text:
-                yield char
-                time.sleep(0.03)
-        return Response(stream(response_text), status=200, mimetype='text/plain')
-    except Exception as e:
-        return Response(f"Error: {str(e)}", status=500, mimetype='text/plain')
-
-@app.route('/tech_resp', methods=['POST'])
-def tech_resp():
-    user_question = request.json.get('message')
-    email = request.json.get('email')  # Ensure email is fetched from session
-
-    if not user_question:
-        return Response("Question is required", status=400, mimetype='text/plain')
-
-    try:
-        response_text = process_user_question(user_question, "technicalclubs.pdf")
-        if needs_fallback(response_text):
-            model = genai.GenerativeModel('gemini-pro')
-            response = model.generate_content(user_question)
-            response_text = response.text
-        
-        # Save both user question and bot response to MongoDB
-        messages_collection.insert_one({
-            "user_message": user_question,
-            "bot_response": response_text,
-            "user_email": email,
-            "timestamp": time.time()
-        })
-
-        def stream(response_text):
-            for char in response_text:
-                yield char
-                time.sleep(0.03)
-        return Response(stream(response_text), status=200, mimetype='text/plain')
-    except Exception as e:
-        return Response(f"Error: {str(e)}", status=500, mimetype='text/plain')
-
-
-    
-@app.route('/api/user/chat-history', methods=['GET'])
-def get_chat_history():
-    email = session.get('email')
-    if not email:
-        return Response("User not logged in", status=401, mimetype='text/plain')
-    
-    try:
-        chat_history = messages_collection.find({"user_email": email})
-        chat_history_list = list(chat_history)
-        
-        for message in chat_history_list:
-            message['_id'] = str(message['_id'])
-        
-        return Response(json.dumps(chat_history_list), status=200, mimetype='application/json')
-    except Exception as e:
-        print(f"Error in get_chat_history: {str(e)}")  # Log error for debugging
-        return Response(f"Error: {str(e)}", status=500, mimetype='text/plain')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8000)
